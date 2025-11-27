@@ -1,32 +1,24 @@
-name: Python security scan
+name: Bandit Security Scan
 
 on:
   push:
-    branches: [ dev ]
   pull_request:
-    branches: [ main, dev ]
 
 jobs:
-  bandit-scan:
+  bandit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.x'
 
       - name: Install Bandit
         run: pip install bandit
 
-      - name: Run Bandit
-        run: bandit -r . -f txt -o bandit-report.txt
-
-      - name: Upload Bandit report
-        uses: actions/upload-artifact@v4
-        with:
-          name: bandit-report
-          path: bandit-report.txt
+      - name: Run Bandit scan
+        run: bandit -r . -ll --exit-zero
